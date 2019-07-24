@@ -2,6 +2,7 @@ package com.stackroute.muzix.controller;
 
 import com.stackroute.muzix.domain.Track;
 import com.stackroute.muzix.exceptions.TrackAlreadyExistsException;
+import com.stackroute.muzix.exceptions.TrackNotFoundException;
 import com.stackroute.muzix.service.TrackService;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,18 @@ public class TracKController {
     @GetMapping("track/{id}")
     public ResponseEntity<?> getTrackById(@PathVariable(value = "id") Integer id)
     {
-        return new ResponseEntity<Track>(trackService.getTrackById(id),HttpStatus.OK);
+        ResponseEntity responseEntity;
+
+        try {
+
+            responseEntity=  new ResponseEntity<Track>(trackService.getTrackById(id),HttpStatus.OK);
+        }
+        catch(TrackNotFoundException ex)
+        {
+            responseEntity=new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
+           ex.printStackTrace();
+        }
+        return responseEntity;
     }
     @DeleteMapping("track/{id}")
     public ResponseEntity<?> deleteuserById(@PathVariable(value="id") Integer id)
@@ -67,10 +79,18 @@ public class TracKController {
             return responseEntity;
         }
 
-   @GetMapping("track/{name}")
+   @GetMapping("tracks/{name}")
    @Query("from Track where name=?1")
     public ResponseEntity<?> getAllTracksByName(@PathVariable(value="name") String name)
     {
-        return new ResponseEntity<List<Track>>(trackService.getTrackByName(name),HttpStatus.OK);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity=new ResponseEntity<List<Track>>(trackService.getTrackByName(name),HttpStatus.OK);
+        }
+        catch (TrackNotFoundException e)
+        {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+       return responseEntity;
     }
 }

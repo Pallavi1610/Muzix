@@ -2,6 +2,7 @@ package com.stackroute.muzix.service;
 
 import com.stackroute.muzix.domain.Track;
 import com.stackroute.muzix.exceptions.TrackAlreadyExistsException;
+import com.stackroute.muzix.exceptions.TrackNotFoundException;
 import com.stackroute.muzix.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class TrackServiceImpl implements TrackService{
         Track savedTrack=trackRepository.save(track);
         if(savedTrack==null)
         {
-            throw new TrackAlreadyExistsException("Track Already Exists");
+            throw new TrackAlreadyExistsException("Track cannot be empty");
         }
 
         return savedTrack;
@@ -42,9 +43,15 @@ public class TrackServiceImpl implements TrackService{
     }
 
     @Override
-    public Track getTrackById(int id) {
-        Track track=trackRepository.findById(id).get();
-        return track;
+    public Track getTrackById(int id) throws TrackNotFoundException {
+        if(!trackRepository.findById(id).isPresent()) {
+            throw new TrackNotFoundException("No track found with this Id");
+
+        }
+
+      else {
+            Track track = trackRepository.findById(id).get();
+            return track;        }
     }
 
     @Override
@@ -54,7 +61,12 @@ public class TrackServiceImpl implements TrackService{
     }
 
     @Override
-    public List<Track> getTrackByName(String name) {
-        return trackRepository.getTrackByName(name);
+    public List<Track> getTrackByName(String name) throws TrackNotFoundException{
+        List<Track> tracks=trackRepository.getTrackByName(name);
+        if(tracks.isEmpty())
+        {
+            throw new TrackNotFoundException("No Track found with this track name");
+        }
+        return tracks;
     }
 }
