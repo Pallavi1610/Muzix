@@ -2,6 +2,7 @@ package com.stackroute.muzix.controller;
 
 import com.stackroute.muzix.domain.Track;
 import com.stackroute.muzix.service.TrackService;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,8 @@ import java.util.List;
 public class TracKController {
     TrackService trackService;
 
-    public TracKController(TrackService trackService) {
+    public TracKController(TrackService trackService)
+    {
         this.trackService = trackService;
     }
     @PostMapping("track")
@@ -53,5 +55,11 @@ public class TracKController {
         trackService.saveTrack(track);
         responseEntity = new ResponseEntity<String>("Updated Successfully", HttpStatus.CREATED);
         return responseEntity;
+    }
+   @GetMapping("track/{name}")
+   @Query("from Track where name=?1")
+    public ResponseEntity<?> getAllTracksByName(@PathVariable(value="name") String name)
+    {
+        return new ResponseEntity<List<Track>>(trackService.getTrackByName(name),HttpStatus.OK);
     }
 }
