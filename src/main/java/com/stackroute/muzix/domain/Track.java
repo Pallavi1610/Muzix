@@ -1,12 +1,11 @@
 package com.stackroute.muzix.domain;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class Track {
+
     @Id
     private int id;
     private String name;
