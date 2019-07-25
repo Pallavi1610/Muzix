@@ -31,7 +31,6 @@ public class CommandListener implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
        Logger logger = LoggerFactory.getLogger(CommandListener.class);
-        try {
             Track newTrack = new Track(id,name,comment);
             System.out.println(newTrack);
             trackService.saveTrack(newTrack);
@@ -40,10 +39,7 @@ public class CommandListener implements CommandLineRunner {
                 logger.info(track.toString());
             }
 
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 }
 
