@@ -34,9 +34,11 @@ public class TrackServiceImpl implements TrackService
     }
 
     @Override
-    public void deleteTrack(int id) {
-        trackRepository.deleteById(id);
-
+    public void deleteTrack(int id) throws TrackNotFoundException {
+        if(!trackRepository.findById(id).isPresent()) {
+			throw new TrackNotFoundException();
+		}
+			trackRepository.delete(getTrackById(id));
     }
 
     @Override
@@ -57,9 +59,15 @@ public class TrackServiceImpl implements TrackService
     }
 
     @Override
-    public Track UpdateTrack(Track track) {
-        Track savedTrack=trackRepository.save(track);
-        return savedTrack;
+    public Track updateTrack(Track track) throws TrackNotFoundException {
+        Track savedTrack = trackRepository.getOne(track.getId());
+		savedTrack.setName(track.getName());
+		savedTrack.setComment(track.getComment());
+		trackRepository.save(savedTrack);
+		if(savedTrack == null) {
+			throw new TrackNotFoundException();
+		}
+		return savedTrack;
     }
 
     @Override
