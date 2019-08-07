@@ -8,5 +8,5 @@ public interface TrackService {
     void deleteTrack(int id);
     List<Track> getAllTracks();
     Track getTrackById(int id);
-    Track UpdateTrack(Track track);
+    Track updateTrack(Track track);
 }
