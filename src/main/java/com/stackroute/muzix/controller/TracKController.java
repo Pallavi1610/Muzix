@@ -14,25 +14,18 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/v1")
 public class TracKController {
-    private TrackService trackService;
+	@Autowired
+        private TrackService trackService;
 
-    public TracKController(TrackService trackService)
-    {
-        this.trackService = trackService;
-    }
+   
     //Add Track
     @PostMapping("track")
-    public ResponseEntity<?> saveTrack(@RequestBody Track track) {
-        ResponseEntity responseEntity=null;
-        try {
-            trackService.saveTrack(track);
-            responseEntity = new ResponseEntity<String>("Successfully created", HttpStatus.CREATED);
-
-        } catch (TrackAlreadyExistsException ex) {
-            responseEntity = new ResponseEntity<String>(ex.getMessage(), HttpStatus.CONFLICT);
-        }
-
-        return responseEntity;
+    public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException
+    {
+       	    ResponseEntity responseEntity=null;
+            Track savedTrack=trackService.saveTrack(track);
+            responseEntity = new ResponseEntity<Track>(savedTrack, HttpStatus.OK);
+            return responseEntity;
     }
     //Retrieve all the tracks
     @GetMapping("track")
@@ -55,8 +48,8 @@ public class TracKController {
     public ResponseEntity<?> deleteTrackById(@PathVariable(value="id") Integer id) throws TrackNotFoundException 
     {
         ResponseEntity responseEntity=null;
-        trackService.deleteTrack(id);
-        responseEntity=new ResponseEntity<String>("Deleted",HttpStatus.OK);
+        Track savedTrack=trackService.deleteTrack(id);
+        responseEntity=new ResponseEntity<Track>(savedTrack,HttpStatus.OK);
         return responseEntity;
     }
     //Update Track 
