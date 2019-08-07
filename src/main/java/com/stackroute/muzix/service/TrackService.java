@@ -6,10 +6,11 @@ import com.stackroute.muzix.exceptions.TrackNotFoundException;
 import java.util.List;
 
 public interface TrackService {
-    Track saveTrack(Track track) throws TrackAlreadyExistsException;
-    void deleteTrack(int id) throws TrackNotFoundException;
-    List<Track> getAllTracks();
-    Track getTrackById(int id) throws TrackNotFoundException;
-    Track updateTrack(Track track) throws TrackNotFoundException;
-    List<Track> getTrackByName(String name) throws TrackNotFoundException;
+    
+    Track saveTrack(Track track) throws TrackAlreadyExistsException,Exception;
+    void deleteTrack(int id) throws TrackNotFoundException,exception;
+    List<Track> getAllTracks() throws Exception;
+    Track getTrackById(int id) throws TrackNotFoundException,Exception;
+    Track updateTrack(Track track) throws TrackNotFoundException,Exception;
+    List<Track> getTrackByName(String name) throws TrackNotFoundException,Exception;
 }
