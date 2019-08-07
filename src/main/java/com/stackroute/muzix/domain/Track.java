@@ -1,11 +1,9 @@
 package com.stackroute.muzix.domain;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class Track {
-
     @Id
     private int id;
     
