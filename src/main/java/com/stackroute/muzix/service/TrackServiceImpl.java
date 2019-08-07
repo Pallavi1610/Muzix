@@ -38,7 +38,7 @@ public class TrackServiceImpl implements TrackService
         if(!trackRepository.findById(id).isPresent()) {
 			throw new TrackNotFoundException();
 		}
-			trackRepository.delete(getTrackById(id));
+			trackRepository.deleteById(id);
     }
 
     @Override
